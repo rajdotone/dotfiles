@@ -1,0 +1,38 @@
+# A clean, lightning-fast single-line layout
+format = """
+$directory\
+$git_branch\
+$git_status\
+$character\
+"""
+
+# Modern, distinct lambda command prompt
+[character]
+success_symbol = "[╰─λ](bold green) "
+error_symbol = "[╰─λ](bold red) "
+
+# Lightweight path tracking
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+style = "bold cyan"
+
+# Asynchronous Git processing (zero prompt latency)
+[git_branch]
+symbol = " "
+style = "bold magenta"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "bold red"
+format = "([\\[$all_status$ahead_behind\\]]($style) )"
+conflicted = "="
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+untracked = "?"
+stashed = "$"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"

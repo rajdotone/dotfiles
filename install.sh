@@ -1,30 +1,59 @@
 #!/bin/bash
 
-# Ensure standard system configuration directory exists
+# Ensure native macOS system configuration directory exists
 mkdir -p "$HOME/.config"
-
-# Define the root dotfiles path
 DOTFILES_DIR="$HOME/dotfiles"
 
 echo "--------------------------------------------"
-echo "Initializing System-Wide Dotfile Symlinks..."
+echo "Checking System Prerequisites..."
 echo "--------------------------------------------"
 
-# --- NEOVIM AUTO-LINKING ---
-# If a real physical directory exists at ~/.config/nvim, back it up safely
-if [ -d "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
-    echo "→ Found existing physical Neovim directory. Backing up to ~/.config/nvim.bak"
-    mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+# Verify Homebrew Core Engine
+if ! command -v brew &> /dev/null; then
+    echo "→ Homebrew not found. Installing now..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    echo "✔ Homebrew engine is verified."
 fi
 
-# Create or overwrite the symlink pointing to your global dotfiles folder
-echo "→ Linking Neovim configuration..."
-ln -sfn "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
-
-# --- FUTURE APPS GO HERE ---
-# When you want to track Ghostty later, you just drop lines like this here:
-# ln -sfn "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+# Verify Oh My Zsh Environment
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "→ Oh My Zsh missing. Deploying framework..."
+    RUNZSH=no CHSH=no /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+    echo "✔ Oh My Zsh framework is verified."
+fi
 
 echo "--------------------------------------------"
-echo "Done! Workstation configuration is synchronized."
+echo "Processing Dependencies via Brewfile..."
+echo "--------------------------------------------"
+cd "$DOTFILES_DIR" || exit
+brew bundle
+
+echo "--------------------------------------------"
+echo "Deploying System-Wide Dotfile Symlinks..."
+echo "--------------------------------------------"
+
+deploy_link() {
+    local source_file="$1"
+    local target_link="$2"
+    
+    if [ -d "$target_link" ] || [ -f "$target_link" ]; then
+        if [ ! -L "$target_link" ]; then
+            echo "→ Found existing physical target at $target_link. Backing up to .bak"
+            mv "$target_link" "${target_link}.bak"
+        fi
+    fi
+    ln -sfn "$source_file" "$target_link"
+}
+
+# Link Matrix
+deploy_link "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+deploy_link "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+deploy_link "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
+deploy_link "$DOTFILES_DIR/zsh/zshrc" "$HOME/.zshrc"
+
+echo "--------------------------------------------"
+echo "Done! Workstation architecture is synchronized."
 echo "--------------------------------------------"

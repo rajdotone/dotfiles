@@ -1,37 +1,17 @@
-# 🎨 Color Theme & Transparency
-theme = Rose Pine
-background-opacity = 0.88
-background-blur-radius = 25
+#theme = Catppuccin Mocha
+ theme = GruvboxDark
+# font-family = Meslo LGS Nerd Font Mono
+# font-family = CaskaydiaMono Nerd Font
+# font-family = CaskaydiaCove Nerd Font
+font-size = 17
+background-opacity = 0.90
+gtk-titlebar = false
+# custom-shader = /home/chris/bloom.glsl
+#custom-shader = /home/chris/crt.glsl
 
-# 🔤 Typography & Size
-font-family = JetBrainsMonoNL Nerd Font
-font-size = 20
-font-feature = -liga,-calt,-clig
+# Slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95
 
-# 🖱️ Cursor & Focus Behavior
-cursor-style = block
-cursor-style-blink = false
-cursor-color = cell-foreground
-cursor-text = cell-background
-mouse-hide-while-typing = true
-
-# 🖼️ Window Aesthetics & Layout
-macos-titlebar-style = hidden
-macos-option-as-alt = true
-window-padding-x = 10
-window-padding-y = 10
-window-padding-balance = true
-unfocused-split-opacity = 0.55
-split-divider-color = #524f67
-
-# ⚙️ Updates & Integration
-auto-update = check
-auto-update-channel = stable
-shell-integration-features = no-cursor
-copy-on-select = clipboard
-confirm-close-surface = false
-
-# ⌨️ Custom Keybindings
-keybind = ctrl+bracket_left=text:\x1b
-keybind = super+i=inspector:toggle
-keybind = ctrl+space>r=reload_config
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll
+window-decoration = true
